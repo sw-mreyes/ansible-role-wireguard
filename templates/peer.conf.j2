@@ -1,0 +1,18 @@
+[Interface]
+Address = {{ wireguard_peer.address }}
+PrivateKey = {{ wg_peer_private_key }}
+{% if wg_peer_listen_port is defined %}
+ListenPort = {{ wg_peer_listen_port }}
+{% else %}
+ListenPort = 51820
+{% endif %}
+
+[Peer]
+# monitoring.system
+PublicKey = {{ public_key }}
+{% if wireguard_peer.allowed_out is defined %}
+AllowedIPs = {{ wireguard_peer.allowed_out }}
+{% else %}
+AllowedIPs = {{ wireguard_peer.allowed_ips }}
+{% endif %}
+Endpoint = {{ wireguard_endpoint }}:{{ wireguard_port }}

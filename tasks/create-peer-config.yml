@@ -1,0 +1,33 @@
+---
+- name: "Create peer private key"
+  shell: wg genkey
+  register: wg_peer_private_key_result
+  tags:
+    - wg-generate-peer-keys
+
+- name: Set private key fact
+  set_fact:
+    wg_peer_private_key: "{{ wg_peer_private_key_result.stdout }}"
+  tags:
+    - wg-generate-peer-keys
+
+- name: Derive WireGuard public key
+  shell: "echo '{{ wg_peer_private_key }}' | wg pubkey" # noqa 306
+  register: wg_peer_public_key_result
+  changed_when: false
+  tags:
+    - wg-generate-peer-keys
+
+- name: Set public key fact
+  set_fact:
+    wg_peer_public_key: "{{ wg_peer_public_key_result.stdout }}"
+  tags:
+    - wg-generate-peer-keys
+
+- name: Create a local config file for the wireguard_peer
+  local_action: template
+  become: no
+  args:
+    src: peer.conf.j2
+    dest: peer.conf
+

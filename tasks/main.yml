@@ -98,6 +98,9 @@
   tags:
     - wg-config
 
+- include_tasks: "create-peer-config.yml"
+  when: wireguard_peer is defined
+
 - name: Create WireGuard configuration directory
   file:
     dest: "{{ wireguard_remote_directory }}"
