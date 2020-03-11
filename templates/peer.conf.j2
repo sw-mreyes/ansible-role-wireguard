@@ -6,6 +6,9 @@ ListenPort = {{ wg_peer_listen_port }}
 {% else %}
 ListenPort = 51820
 {% endif %}
+{% if wireguard_peer.dns is defined %}
+DNS = {{ wireguard_peer.dns }}
+{% endif %}
 
 [Peer]
 # monitoring.system
